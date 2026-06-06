@@ -1,0 +1,202 @@
+/* style.css */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Caveat', cursive;
+    background-color: #f4eee1; /* Color crema tipo papel antiguo */
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* --- ESTILOS DEL SOBRE --- */
+.envelope {
+    text-align: center;
+    background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+    background-color: #e5d8b8;
+    width: 320px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    position: relative;
+}
+
+.seal {
+    width: 60px;
+    height: 60px;
+    background-color: #a83232; /* Rojo cera */
+    border-radius: 50%;
+    color: white;
+    font-size: 28px;
+    line-height: 60px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.seal:hover {
+    transform: scale(1.1);
+}
+
+.instruction {
+    margin-top: 20px;
+    color: #665;
+    font-size: 1.2rem;
+}
+
+/* --- ESTILOS DE LA CARTA (Hoja de Cuaderno) --- */
+.letter-paper {
+    width: 90%;
+    max-width: 500px;
+    height: 85vh;
+    background-color: #fff;
+    /* Este gradiente crea las líneas del cuaderno */
+    background-image: linear-gradient(transparent 95%, #cbd5e1 95%);
+    background-size: 100% 2.5rem; /* Ajusta la separación de las líneas */
+    padding: 2rem;
+    box-sizing: border-box;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow-y: auto;
+    line-height: 2.5rem; /* Debe coincidir con el background-size */
+    font-size: 1.5rem;
+    color: #333;
+    position: relative; /* Fundamental para que las marcas de agua se queden adentro */
+}
+
+/* MARCA DE AGUA 1: HELLO KITTY (Esquina superior derecha) */
+.letter-paper::before {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
+    background-image: url('http://googleusercontent.com/image_collection/image_retrieval/2515075996423181751');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.08; /* Muy transparente para no estorbar la lectura */
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* MARCA DE AGUA 2: GATITOS (Esquina inferior izquierda) */
+.letter-paper::after {
+    content: "";
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 140px;
+    height: 140px;
+    background-image: url('http://googleusercontent.com/image_collection/image_retrieval/16202650454149070603');
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.12; 
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Asegura que el texto y el video queden por encima de las marcas de agua */
+.letter-paper > * {
+    position: relative;
+    z-index: 1;
+}
+
+.letter-title {
+    text-align: center;
+    color: #5b7c99; /* Azul tenue */
+    margin: 0;
+    line-height: 2.5rem;
+}
+
+.letter-subtitle {
+    text-align: center;
+    color: #888;
+    margin: 0 0 2rem 0;
+    font-size: 1.2rem;
+}
+
+/* --- ANIMACIÓN DE FLORES --- */
+/* --- ANIMACIÓN DE TRANSICIÓN --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('fondo2.jpg'); /* AQUÍ LLAMAS A TU FOTO */
+            background-size: cover;
+            background-position: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+.overlay.burst {
+    animation: flowerBurst 2s ease-in-out forwards;
+}
+
+@keyframes flowerBurst {
+    0% { opacity: 0; transform: scale(0.9); }
+    40% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1.05); }
+    100% { opacity: 0; visibility: hidden; }
+}
+
+/* --- ESTILOS DE LOS BOTONES --- */
+.buttons-container {
+    text-align: center;
+    margin-top: 2rem;
+    position: relative;
+    min-height: 120px; /* Da espacio para que el botón salte */
+}
+
+.question {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #a83232;
+    line-height: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+button {
+    font-family: 'Caveat', cursive;
+    font-size: 1.5rem;
+    padding: 8px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background-color: #ffb6c1; 
+    color: #333;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+#btn-yes {
+    background-color: #87cefa; /* Azul claro para el sí */
+}
+
+#btn-no {
+    transition: left 0.3s ease, top 0.3s ease;
+    z-index: 100;
+}

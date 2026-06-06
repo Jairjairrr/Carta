@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para ti ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- ESTILOS GENERALES Y FONDOS --- */
+        body {
+            margin: 0; padding: 0;
+            background-image: url('fondo.jpg'); 
+            background-size: cover; background-position: center;
+            background-attachment: fixed;
+            font-family: 'Quicksand', sans-serif;
+            color: #333; overflow: hidden; position: relative; height: 100vh;
+        }
+
+        /* --- SISTEMA DE PANTALLAS --- */
+        .screen {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.8s ease-in-out; z-index: 10;
+        }
+        .screen.active { opacity: 1; pointer-events: auto; }
+
+        #envelope-screen { background-color: rgba(244, 238, 225, 0.2); }
+
+        .envelope {
+            text-align: center; background-image: url('https://www.transparenttextures.com/patterns/cream-paper.png');
+            background-color: #e5d8b8; width: 320px; height: 200px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.4); position: relative;
+        }
+        .seal {
+            width: 60px; height: 60px; background-color: #a83232;
+            border-radius: 50%; color: white; font-size: 28px;
+            line-height: 60px; cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2); transition: transform 0.2s ease;
+        }
+        .seal:hover { transform: scale(1.1); }
+        .instruction { margin-top: 20px; color: #333; font-weight: bold; font-size: 1.2rem; font-family: 'Caveat', cursive;}
+
+        /* --- TRANSICIÓN --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('fondo2.jpg'); 
+            background-size: cover; background-position: center;
+            z-index: 100; opacity: 0; pointer-events: none;
+        }
+        .overlay.burst { animation: flowerBurst 2s ease-in-out forwards; }
+        @keyframes flowerBurst {
+            0% { opacity: 0; } 40% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; visibility: hidden; }
+        }
+
+        /* --- CARTA --- */
+        #letter-screen, #final-screen { display: block; overflow-y: auto; background-color: transparent; }
+
+        .watermark-kitty {
+            position: fixed; top: 10%; right: -5%; width: 250px; height: 250px;
+            background-image: url('foto_hellokitty.png'); background-size: contain; background-repeat: no-repeat;
+            opacity: 0.12; z-index: -1; pointer-events: none;
+        }
+        .watermark-cats {
+            position: fixed; bottom: 5%; left: -5%; width: 200px; height: 200px;
+            background-image: url('foto_gatitos.png'); background-size: contain; background-repeat: no-repeat;
+            opacity: 0.15; z-index: -1; pointer-events: none;
+        }
+
+        .letter-container {
+            width: 90%; max-width: 500px; margin: 40px auto;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            padding: 30px 20px; position: relative; z-index: 1;
+        }
+
+        h1, h2, .handwritten { font-family: 'Caveat', cursive; color: #a83232; text-align: center; }
+        h1 { font-size: 3rem; margin-top: 0; }
+        h2 { font-size: 2.2rem; border-bottom: 1px dashed #ccc; padding-bottom: 10px; }
+        p { font-size: 1.1rem; line-height: 1.8; margin-bottom: 20px; text-align: justify; }
+
+        .video-wrapper {
+            width: 100%; border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin: 30px 0;
+            background-color: #000;
+        }
+        .video-wrapper img { width: 100%; display: block; }
+
+        .buttons-section { text-align: center; margin-top: 50px; padding-bottom: 30px; position: relative; min-height: 150px; }
+        .question { font-family: 'Caveat', cursive; font-size: 2.5rem; color: #a83232; margin-bottom: 20px; }
+
+        button {
+            font-family: 'Quicksand', sans-serif; font-size: 1.2rem; font-weight: bold;
+            padding: 12px 35px; margin: 10px; border: none; border-radius: 30px;
+            cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        #btn-yes { background-color: #ffb6c1; color: #333; transition: transform 0.2s; }
+        #btn-no { background-color: #e2e8f0; color: #64748b; position: relative; transition: left 0.3s ease, top 0.3s ease; z-index: 10; }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" loop><source src="cancion.mp3" type="audio/mpeg"></audio>
+    <div id="flower-transition" class="overlay"></div>
+
+    <div id="envelope-screen" class="screen active">
+        <div class="envelope">
+            <div class="seal" onclick="openLetter()">❤️</div>
+            <p class="instruction">Toca el sello para abrir ♥</p>
+        </div>
+    </div>
+
+    <div id="letter-screen" class="screen">
+        <div class="watermark-kitty"></div>
+        <div class="watermark-cats"></div>
+        <div class="letter-container">
+            <h1>Un nuevo comienzo</h1>
+            <h2>with you baby</h2>
+            <p class="handwritten" style="font-size: 1.5rem; color: #555;">Nuestra historia, segundo capítulo</p>
+            <p>A veces, cuando pienso en nosotros, no encuentro las palabras exactas, así que prefiero que veas esto. Un pequeño recordatorio de lo que somos cuando estamos juntos:</p>
+            <h2>Lo que dejamos atrás</h2>
+            <p>He estado pensando mucho en todo lo que pasó. Entiendo los problemas que tuvimos, pero también sé que esos problemas ya no existen. Hemos tenido tiempo para sanar, para entender qué falló y, sobre todo, para darnos cuenta de que nos hacemos falta.</p>
+            <h2>Lo que viene</h2>
+            <p>Quiero hacer las cosas bien esta vez. Quiero escucharte, apoyarte y que volvamos a ser ese equipo que sabe hacer que los días pesados se sientan ligeros. Sé que vale la pena intentarlo de nuevo, porque lo nuestro es real.</p>
+            <h2>Me gustas mucho cariño mio ❤️ </h2>
+            <p>Me encanta tu forma de ser como por ejemplo tu cara de enojada: </p>
+            <div class="video-wrapper"><img src="enojada.gif" alt="Enojada"></div>
+            <p>o como cuando te duermes en segundos en mi hombro: </p>
+            <div class="video-wrapper"><img src="dormida.gif" alt="Dormida"></div>
+            <p>Y tus besos amor, los mejores que tendre en esta vida y la otra</p>
+            <div class="video-wrapper"><img src="beso.gif" alt="Beso"></div>
+            <p>Cada parte de ti, de tu humor, tu ser me encantan amor, y quiero que sepas que para mi eres la mujer perfecta y la que quiero en mi vida</p>
+            <P>Y te recordare cada dia que eres lo que mas soñe y amare para que te sientas segura a mi lado cariño mio</P>
+            <div class="buttons-section">
+                <div class="question">¿Me darías la oportunidad de volver a ser tu novio? ❤️</div>
+                <button id="btn-yes" onclick="goToFinal()">Sí</button>
+                <button id="btn-no">No</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-screen" class="screen">
+        <div class="letter-container">
+            <h1>¡Te amo mucho amor! ❤️</h1>
+            <p style="text-align: center; font-size: 1.5rem;">Gracias por darme esta oportunidad. Prometo que esta vez será mejor que nunca. ¡Eres la persona que quiero a mi lado siempre!</p>
+            <p>Toma beso mamor</p>
+            <div class="video-wrapper"><img src="mio.gif" alt="Enojada"></div>
+
+        </div>
+    </div>
+
+    <script>
+        function openLetter() {
+            const music = document.getElementById('bg-music');
+            music.play();
+            const trans = document.getElementById('flower-transition');
+            trans.classList.add('burst');
+            setTimeout(() => {
+                document.getElementById('envelope-screen').classList.remove('active');
+                document.getElementById('letter-screen').classList.add('active');
+                document.body.style.overflow = 'auto';
+            }, 800);
+        }
+
+        // Nueva función para llevar a la pantalla final
+        function goToFinal() {
+            const trans = document.getElementById('flower-transition');
+            trans.classList.add('burst');
+            setTimeout(() => {
+                document.getElementById('letter-screen').classList.remove('active');
+                document.getElementById('final-screen').classList.add('active');
+            }, 800);
+        }
+
+        const btnNo = document.getElementById('btn-no');
+        btnNo.addEventListener('mouseover', (e) => {
+            btnNo.style.position = 'absolute';
+            btnNo.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btnNo.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+        });
+    </script>
+</body>
+</html>
